@@ -331,7 +331,7 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 echo $no_color"RUNNING COMPOSER";
-composer update -y
+composer update -n
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run composer update."
     exit 1
@@ -415,7 +415,7 @@ echo $green_color"[######################################]";
 
 # Run Laravel migrations
 echo $green_color"RUNNING MIGRATIONS";
-php artisan migrate --seed -y
+php artisan migrate --seed -force
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run migrations."
     exit 1
