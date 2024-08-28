@@ -162,8 +162,6 @@ sudo bash -c "echo 'server {
 }' > /etc/nginx/sites-available/$domain" >> $script_log_file 2>/dev/null
 ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/ >> $script_log_file 2>/dev/null
 sudo mkdir /var/www/$branch >> $script_log_file 2>/dev/null
-sudo mkdir /var/www/$branch/public >> $script_log_file 2>/dev/null
-sudo bash -c "echo  '<h1 style=\"color:#0194fe\">Welcome</h1><h4 style=\"color:#0194fe\">$domain</h4>' > /var/www/$branch/public/index.php" >> $script_log_file 2>/dev/null
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -186,7 +184,7 @@ sudo touch /etc/nginx/sites-available/$domain >> $script_log_file 2>/dev/null
 sudo bash -c "echo 'server {
     listen 80;
     #access_log off;
-    root /var/www/html/'$domain'/public;
+    root /var/www/'$branch'/public;
     index index.php index.html index.htm index.nginx-debian.html;
     client_max_body_size 1000M;
     fastcgi_read_timeout 8600;
