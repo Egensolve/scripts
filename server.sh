@@ -341,11 +341,11 @@ echo $green_color"[######################################]";
 
 echo $green_color"UPDATING .ENV";
 cp .env.example .env
-sed -i "s|APP_URL=http://localhost|APP_URL=https://$domain|g" .env
-sed -i "s|DB_DATABASE=lms_db|DB_DATABASE=$branch|g" .env
+sed -i "s|APP_URL=http://127.0.0.1:8000|APP_URL=https://$domain|g" .env
+sed -i "s|DB_DATABASE=lms|DB_DATABASE=$branch|g" .env
 sed -i "s|DB_PASSWORD=|DB_PASSWORD=$MYSQL_ROOT_PASSWORD|g" .env
-sed -i "s|WHATSAPP_SERVER_URL=http://localhost:3000|WHATSAPP_SERVER_URL=https://$domain:3000|g" .env
-sed -i "s|CHAT_SERVER_URL=http://localhost:5000|CHAT_SERVER_URL=https://$domain:5000|g" .env
+sed -i "s|WHATSAPP_SERVER_URL=|WHATSAPP_SERVER_URL=https://$domain:3000|g" .env
+sed -i "s|CHAT_SERVER_URL=|CHAT_SERVER_URL=https://$domain:5000|g" .env
 php artisan key:generate
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to update .env or generate app key."
