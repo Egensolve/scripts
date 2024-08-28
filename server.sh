@@ -148,7 +148,7 @@ sudo bash -c "echo 'server {
     listen [::]:80;
     root /var/www/'$branch'/public;
     index index.php index.html index.htm index.nginx-debian.html;
-    server_name '$domain' www.'$domain';
+    server_name '$domain';
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
@@ -177,7 +177,7 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"GENERATING SSL CERTIFICATE FOR $domain"
-certbot --nginx -d $domain -d www.$domain --non-interactive --agree-tos -m admin@$domain >> $script_log_file 2>/dev/null
+certbot --nginx -d $domain --non-interactive --agree-tos -m admin@$domain >> $script_log_file 2>/dev/null
 rm -rf /etc/nginx/sites-available/$domain >> $script_log_file 2>/dev/null
 sudo touch /etc/nginx/sites-available/$domain >> $script_log_file 2>/dev/null
 
@@ -226,7 +226,7 @@ sudo bash -c "echo 'server {
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
     }
    listen 443 ssl; # managed by Certbot
-   server_name '$domain' www.'$domain';
+   server_name '$domain';
    ssl_certificate /etc/letsencrypt/live/'$domain'/fullchain.pem; # managed by Certbot
    ssl_certificate_key /etc/letsencrypt/live/'$domain'/privkey.pem; # managed by Certbot
    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
@@ -364,7 +364,7 @@ fi
 mv system_theme-main.zip storage/app
 cd storage/app || { echo "${no_color}Error: Failed to change directory to storage/app"; exit 1; }
 unzip system_theme-main.zip
-mv system_theme-main ../../public
+mv system_theme-main public
 cd ../..
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to install the system theme."
@@ -415,23 +415,11 @@ echo $green_color"[######################################]";
 
 # Run Laravel migrations
 echo $green_color"RUNNING MIGRATIONS";
-php artisan migrate
+php artisan migrate --seed -y
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run migrations."
     exit 1
 fi
-echo $green_color"[SUCCESS]";
-echo $green_color"[######################################]";
-
-# Seed the database
-echo $green_color"SEEDING DATABASE";
-php artisan db:seed
-if [ $? -ne 0 ]; then
-    echo "${no_color}Error: Failed to seed the database."
-    exit 1
-fi
-echo $green_color"[SUCCESS]";
-echo $green_color"[######################################]";
 
 # Indicate overall success
 echo $green_color"[SUCCESS]";
