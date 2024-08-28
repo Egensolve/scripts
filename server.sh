@@ -387,12 +387,6 @@ fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
-# Check if MySQL is installed
-if ! command -v mysql &> /dev/null; then
-    echo "${no_color}Error: MySQL is not installed."
-    exit 1
-fi
-
 # Create the database
 echo $green_color"CREATING DATABASE";
 mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $branch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
