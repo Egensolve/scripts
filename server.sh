@@ -537,5 +537,7 @@ unset PAT_TOKEN;
 unset MYSQL_ROOT_PASSWORD;
 unset branch;
 
+history -c
+
 echo $green_color"[MADE WITH LOVE BY OK]";
 echo $green_color"[####################]";
