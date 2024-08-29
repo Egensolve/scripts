@@ -508,6 +508,7 @@ cd ..
 echo "require('./mtz_wwebjs/src/server.js');" > "${branch}".js
 pm2 start "${branch}".js
 pm2 startup
+ufw allow 3000
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
