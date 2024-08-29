@@ -494,7 +494,7 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"INSTALLING WHATSAPP";
-sudo apt-get install -y chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+sudo apt-get install chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils -y
 mkdir /var/www/"${branch}_whatsapp"
 cd /var/www/"${branch}_whatsapp"
 git clone https://$PAT_TOKEN@github.com/SayedAbbady/whatsapp-server.git
@@ -511,9 +511,9 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 
-echo $no_color"INSTALLING SUPERVISOR";
-sudo apt-get install -y supervisor
-sudo bash -c 'cat > /etc/supervisor/conf.d/"${branch}_laravel-worker.conf" <<EOL
+echo "${no_color}INSTALLING SUPERVISOR"
+sudo apt-get install supervisor -y
+sudo bash -c "cat > /etc/supervisor/conf.d/${branch}_laravel-worker.conf <<EOL
 [program:${branch}_laravel-worker]
 process_name=%(program_name)s_%(process_num)02d
 command=php /var/www/${branch}/artisan queue:work --queue=veryhigh,high,low,default --sleep=3 --tries=3
@@ -523,12 +523,13 @@ user=root
 numprocs=8
 redirect_stderr=true
 stdout_logfile=/var/www/${branch}/storage/logs/worker.log
-EOL'
+EOL"
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl start "${branch}_laravel-worker:*"
-echo $green_color"[SUCCESS]";
-echo $green_color"[######################################]";
+echo "${green_color}[SUCCESS]"
+echo "${green_color}[######################################]"
+
 
 unset PAT_TOKEN;
 unset MYSQL_ROOT_PASSWORD;
