@@ -226,7 +226,7 @@ sudo bash -c "echo 'server {
 
     location ~ \.php\$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
     }
    listen 443 ssl; # managed by Certbot
    server_name '$domain';
@@ -475,10 +475,15 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"RELOADING PHP FPM AND CLI";
-sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/cli/php.ini
-sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/fpm/php.ini
-sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/cli/php.ini
-sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/fpm/php.ini
+sudo update-alternatives --set php /usr/bin/php8.3
+sudo update-alternatives --set phar /usr/bin/phar8.3
+sudo update-alternatives --set phar.phar /usr/bin/phar.phar8.3
+sudo update-alternatives --set php-config /usr/bin/php-config8.3
+sudo update-alternatives --set phpize /usr/bin/phpize8.3
+sudo systemctl stop php8.2-fpm
+sudo systemctl disable php8.2-fpm
+sudo systemctl enable php8.3-fpm
+sudo systemctl start php8.3-fpm
 sudo systemctl reload php8.3-fpm
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
