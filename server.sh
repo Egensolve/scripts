@@ -432,7 +432,7 @@ echo $green_color"[######################################]";
 
 # Run Laravel migrations
 echo $green_color"RUNNING MIGRATIONS";
-php artisan migrate --seed -force
+php artisan migrate --seed --force
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run migrations."
     exit 1
