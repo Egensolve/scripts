@@ -322,6 +322,16 @@ else
 fi
 
 
+echo $green_color"INSTALLING GIT";
+sudo apt install git -y
+if [ $? -ne 0 ]; then
+    echo "${no_color}Error: Failed to clone the repository."
+    exit 1
+fi
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+
 echo $green_color"CLONING REPOSITORY";
 mkdir -p /var/www/$branch
 cd /var/www/$branch || { echo "${no_color}Error: Failed to change directory to /var/www/$branch"; exit 1; }
