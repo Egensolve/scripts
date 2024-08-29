@@ -109,7 +109,10 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 echo $no_color"INSTALLING NPM";
-sudo apt install npm -y >> $script_log_file 2>/dev/null
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+source ~/.bashrc
+export NVM_DIR="$HOME/.nvm"
+nvm install node
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -469,14 +472,14 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 
-echo $no_color"UPDATING NPM";
-sudo apt-get remove nodejs npm
-sudo apt-get autoremove
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-source ~/.bashrc
-nvm install node
-echo $green_color"[SUCCESS]";
-echo $green_color"[######################################]";
+# echo $no_color"UPDATING NPM";
+# sudo apt-get remove nodejs npm
+# sudo apt-get autoremove
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# source ~/.bashrc
+# nvm install node
+# echo $green_color"[SUCCESS]";
+# echo $green_color"[######################################]";
 
 
 echo $no_color"INSTALLING WHATSAPP";
