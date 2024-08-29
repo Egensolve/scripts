@@ -430,11 +430,11 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"STARTING DECRYPTOR INSTALLATION";
-sudo apt update
-sudo apt upgrade
-sudo apt install php8.2-dev
-sudo apt install libcrypto++-dev
-sudo apt install g++
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install php8.3-dev -y
+sudo apt install libcrypto++-dev -y
+sudo apt install g++ -y
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -464,12 +464,14 @@ echo $green_color"[######################################]";
 echo $no_color"RELOADING PHP FPM AND CLI";
 sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/cli/php.ini
 sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/fpm/php.ini
+sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/cli/php.ini
+sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/fpm/php.ini
 sudo systemctl reload php8.2-fpm
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 echo $no_color"INSTALLING WHATSAPP";
-sudo apt-get install chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+sudo apt-get install -y chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
 mkdir /var/www/"${branch}_whatsapp"
 cd /var/www/"${branch}_whatsapp"
 git clone https://$PAT_TOKEN@github.com/SayedAbbady/whatsapp-server.git
