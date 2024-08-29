@@ -109,7 +109,9 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 echo $no_color"INSTALLING NPM";
-sudo apt install npm -y >> $script_log_file 2>/dev/null
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+source ~/.bashrc
+nvm install node
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -123,7 +125,6 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot >> $script_log_file 2>/dev/null
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
-echo $green_color"[######################################]";
 echo $no_color"INSTALLING COMPOSER";
 sudo apt-get update  >> $script_log_file 2>/dev/null
 sudo apt-get purge composer -y >> $script_log_file 2>/dev/null
@@ -307,19 +308,21 @@ sudo apt-get update  >> $script_log_file 2>/dev/null
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
+
 # Read the personal access token from PAT.txt
 if [ -f "PAT.txt" ]; then
     PAT_TOKEN=$(cat PAT.txt)
+    sudo rm PAT.txt
     echo "${green_color}[SUCCESS] Loaded Personal Access Token from PAT.txt"
 else
     echo "${no_color}Error: PAT.txt file not found."
     exit 1
 fi
 
+
 echo $green_color"CLONING REPOSITORY";
 mkdir -p /var/www/$branch
 cd /var/www/$branch || { echo "${no_color}Error: Failed to change directory to /var/www/$branch"; exit 1; }
-
 git init
 git remote add origin https://$PAT_TOKEN@github.com/Egensolve/system_clients.git
 git pull origin $branch
@@ -330,6 +333,7 @@ fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
+
 echo $no_color"RUNNING COMPOSER";
 composer update -n
 if [ $? -ne 0 ]; then
@@ -338,6 +342,7 @@ if [ $? -ne 0 ]; then
 fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
+
 
 echo $green_color"UPDATING .ENV";
 cp .env.example .env
@@ -354,12 +359,14 @@ fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
+
 echo $green_color"INSTALLING SYSTEM THEME";
 apt-get install -y unzip
 if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to install unzip."
     exit 1
 fi
+
 
 mv system_theme-main.zip storage/app
 cd storage/app || { echo "${no_color}Error: Failed to change directory to storage/app"; exit 1; }
@@ -372,6 +379,7 @@ if [ $? -ne 0 ]; then
 fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
+
 
 echo $green_color"LINKING STORAGE";
 php artisan storage:link
@@ -387,6 +395,7 @@ fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
+
 # Create the database
 echo $green_color"CREATING DATABASE";
 mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $branch CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -396,6 +405,7 @@ if [ $? -ne 0 ]; then
 fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
+
 
 # Source SQL file into the database
 echo $green_color"SOURCING SQL FILE";
@@ -407,6 +417,7 @@ fi
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
+
 # Run Laravel migrations
 echo $green_color"RUNNING MIGRATIONS";
 php artisan migrate --seed -force
@@ -414,15 +425,89 @@ if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run migrations."
     exit 1
 fi
-
-# Indicate overall success
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
+
 
 echo $no_color"STARTING DECRYPTOR INSTALLATION";
 sudo apt update
 sudo apt upgrade
 sudo apt install php8.2-dev
+sudo apt install libcrypto++-dev
+sudo apt install g++
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+
+echo $no_color"CLONING DECRYPTOR";
+git clone https://$PAT_TOKEN@github.com/OmarYacop/php_decryptor.git
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+
+echo $no_color"INSTALLING DECRYPTOR";
+cd php_decryptor
+phpize
+./configure
+sed -i '/^CPPFLAGS =/a CPPFLAGS += -I/usr/include/cryptopp' Makefile
+sed -i 's|^LDFLAGS =.*|LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lcryptopp|' Makefile
+make
+sudo make install
+cd ..
+sudo rm -r php_decryptor
+sudo apt remove --purge php8.2-dev
+sudo apt autoremove
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+
+echo $no_color"RELOADING PHP FPM AND CLI";
+sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/cli/php.ini
+sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/fpm/php.ini
+sudo systemctl reload php8.2-fpm
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+echo $no_color"INSTALLING WHATSAPP";
+sudo apt-get install chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+mkdir /var/www/"${branch}_whatsapp"
+cd /var/www/"${branch}_whatsapp"
+git clone https://$PAT_TOKEN@github.com/SayedAbbady/whatsapp-server.git
+mv whatsapp-server mtz_wwebjs
+cd mtz_wwebjs
+npm i
+npm i pm2 -g
+sed -i "s|const DomainName = \"127.0.0.1\";|const DomainName = \"${domain}\";|" src/server.js
+cd ..
+echo "require('./mtz_wwebjs/src/server.js');" > "${branch}".js
+pm2 start "${branch}".js
+pm2 startup
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+
+echo $no_color"INSTALLING SUPERVISOR";
+sudo apt-get install -y supervisor
+sudo bash -c 'cat > /etc/supervisor/conf.d/"${branch}_laravel-worker.conf" <<EOL
+[program:${branch}_laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/${branch}/artisan queue:work --queue=veryhigh,high,low,default --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user=root
+numprocs=8
+redirect_stderr=true
+stdout_logfile=/var/www/${branch}/storage/logs/worker.log
+EOL'
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start "${branch}_laravel-worker:*"
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
+unset PAT_TOKEN;
+unset MYSQL_ROOT_PASSWORD;
+unset branch;
 
 echo $green_color"[MADE WITH LOVE BY OK]";
 echo $green_color"[####################]";
