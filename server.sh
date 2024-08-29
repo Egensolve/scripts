@@ -108,14 +108,14 @@ sudo apt-get purge apache* -y >> $script_log_file 2>/dev/null
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
-echo $no_color"INSTALLING NPM";
+echo "${no_color}INSTALLING NPM";
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-source ~/.bashrc
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm install node
-echo $green_color"[SUCCESS]";
-echo $green_color"[######################################]";
+echo "${green_color}[SUCCESS]";
+echo "${green_color}[######################################]";
+
 
 echo $no_color"INSTALLING CERTBOT (SSL GENERATOR)";
 sudo apt-get install snap -y  >> $script_log_file 2>/dev/null
