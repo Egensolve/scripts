@@ -109,9 +109,7 @@ echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
 echo $no_color"INSTALLING NPM";
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-source ~/.bashrc
-nvm install node
+sudo apt install npm -y >> $script_log_file 2>/dev/null
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -469,6 +467,17 @@ sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/fpm/ph
 sudo systemctl reload php8.2-fpm
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
+
+
+echo $no_color"UPDATING NPM";
+sudo apt-get remove nodejs npm
+sudo apt-get autoremove
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+source ~/.bashrc
+nvm install node
+echo $green_color"[SUCCESS]";
+echo $green_color"[######################################]";
+
 
 echo $no_color"INSTALLING WHATSAPP";
 sudo apt-get install -y chromium-browser && sudo apt-get install ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
