@@ -111,7 +111,7 @@ echo $green_color"[######################################]";
 echo $no_color"INSTALLING NPM";
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 source ~/.bashrc
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install node
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
