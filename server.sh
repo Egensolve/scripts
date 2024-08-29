@@ -437,6 +437,7 @@ if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to run migrations."
     exit 1
 fi
+php artisan optimize:clear && php artisan optimize && php artisan config:clear
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -467,7 +468,7 @@ make
 sudo make install
 cd ..
 sudo rm -r php_decryptor
-sudo apt remove --purge php8.3-dev
+sudo apt remove --purge php8.3-dev -y
 sudo apt autoremove
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
