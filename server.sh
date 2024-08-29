@@ -467,7 +467,7 @@ make
 sudo make install
 cd ..
 sudo rm -r php_decryptor
-sudo apt remove --purge php8.2-dev
+sudo apt remove --purge php8.3-dev
 sudo apt autoremove
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
@@ -478,7 +478,7 @@ sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/cli/ph
 sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.2/fpm/php.ini
 sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/cli/php.ini
 sudo sed -i '/^;zlib.output_handler =/a extension=loader.so' /etc/php/8.3/fpm/php.ini
-sudo systemctl reload php8.2-fpm
+sudo systemctl reload php8.3-fpm
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
