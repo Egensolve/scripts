@@ -544,5 +544,8 @@ unset branch;
 
 history -c
 
+# Delete the script file itself
+rm -- "$0"
+
 echo $green_color"[MADE WITH LOVE BY OK]";
 echo $green_color"[####################]";
