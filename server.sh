@@ -342,6 +342,7 @@ if [ $? -ne 0 ]; then
     echo "${no_color}Error: Failed to clone the repository."
     exit 1
 fi
+git remote set-url origin https://github.com/Egensolve/system_clients.git
 echo $green_color"[SUCCESS]";
 echo $green_color"[######################################]";
 
@@ -545,6 +546,7 @@ unset branch;
 history -c
 
 # Delete the script file itself
+cd
 rm -- "$0"
 
 echo $green_color"[MADE WITH LOVE BY OK]";
