@@ -59,6 +59,27 @@ do
         echo "Updated PHP version in $CONFIG_FILE"
     fi
 done
+
+PHP_FPM_INI="/etc/php/8.3/fpm/php.ini"
+PHP_CLI_INI="/etc/php/8.3/cli/php.ini"
+
+# Function to add the extension line if it doesn't already exist
+add_extension_line() {
+    local INI_FILE="$1"
+    local EXTENSION_LINE="extension=loader.so"
+
+    if ! grep -q "^$EXTENSION_LINE" "$INI_FILE"; then
+        echo "$EXTENSION_LINE" >> "$INI_FILE"
+        echo "Added $EXTENSION_LINE to $INI_FILE"
+    else
+        echo "$EXTENSION_LINE already exists in $INI_FILE"
+    fi
+}
+
+# Add "extension=loader.so" to PHP FPM and CLI ini files
+add_extension_line "$PHP_FPM_INI"
+add_extension_line "$PHP_CLI_INI"
+
 nginx -s reload
 
 echo "All configurations updated, and Nginx reloaded."
