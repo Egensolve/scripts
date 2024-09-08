@@ -8,6 +8,15 @@ else
     exit 1
 fi
 
+sudo apt-get purge php8.2* libapache2-mod-php8.2 -y
+
+sudo apt-get autoremove --purge -y
+sudo apt-get clean -y
+
+sudo apt-get update -y
+sudo apt-get install php8.3 php8.3-cli php8.3-fpm php8.3-mysql php8.3-curl php8.3-xml php8.3-mbstring php8.3-zip -y
+
+
 echo $no_color"STARTING DECRYPTOR INSTALLATION";
 sudo apt update -y
 sudo apt upgrade -y
@@ -41,6 +50,19 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"RELOADING PHP FPM AND CLI";
+CONFIG_DIR="/etc/nginx/sites-available"
+for CONFIG_FILE in "$CONFIG_DIR"/*
+do
+    if [ -f "$CONFIG_FILE" ]; then
+        echo "Processing $CONFIG_FILE"
+        sed -i 's/php8\.2/php8\.3/g' "$CONFIG_FILE"
+        echo "Updated PHP version in $CONFIG_FILE"
+    fi
+done
+nginx -s reload
+
+echo "All configurations updated, and Nginx reloaded."
+
 sudo update-alternatives --set php /usr/bin/php8.3
 sudo update-alternatives --set phar /usr/bin/phar8.3
 sudo update-alternatives --set phar.phar /usr/bin/phar.phar8.3
