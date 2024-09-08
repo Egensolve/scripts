@@ -476,6 +476,22 @@ echo $green_color"[######################################]";
 
 
 echo $no_color"RELOADING PHP FPM AND CLI";
+PHP_FPM_INI="/etc/php/8.3/fpm/php.ini"
+PHP_CLI_INI="/etc/php/8.3/cli/php.ini"
+# Function to add the extension line if it doesn't already exist
+add_extension_line() {
+    local INI_FILE="$1"
+    local EXTENSION_LINE="extension=loader.so"
+
+    if ! grep -q "^$EXTENSION_LINE" "$INI_FILE"; then
+        echo "$EXTENSION_LINE" >> "$INI_FILE"
+        echo "Added $EXTENSION_LINE to $INI_FILE"
+    else
+        echo "$EXTENSION_LINE already exists in $INI_FILE"
+    fi
+}
+add_extension_line "$PHP_FPM_INI"
+add_extension_line "$PHP_CLI_INI"
 sudo update-alternatives --set php /usr/bin/php8.3
 sudo update-alternatives --set phar /usr/bin/phar8.3
 sudo update-alternatives --set phar.phar /usr/bin/phar.phar8.3
